@@ -5,6 +5,7 @@ import com.kob.backend.service.impl.utils.UserDetailsImpl;
 import com.kob.backend.service.user.account.LoginService;
 import com.kob.backend.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,8 +19,22 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
-    public Map<String, String> getToken(String username, String password) {
+    public Map<String, String> getToken(String username, String password, String kaptcha, String kaptcha_uuid) {
+        Map<String, String> map = new HashMap<>();
+
+        if ("".equals(kaptcha) || "".equals(kaptcha_uuid)) {
+            map.put("error_message", "验证码为空");
+            return map;
+        }
+        String code = (String) redisTemplate.opsForValue().get("captcha_codes:" + kaptcha_uuid);
+        if (!code.equals(kaptcha)) {
+            map.put("error_message", "验证码错误");
+            return map;
+        }
         // 封装用户名、密码，密码会封装成加密后的
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username, password);
@@ -31,7 +46,6 @@ public class LoginServiceImpl implements LoginService {
         User user = loginUser.getUser();
         String jwt = JwtUtil.createJWT(user.getId().toString());
 
-        Map<String, String> map = new HashMap<>();
         map.put("error_message", "success");
         map.put("token", jwt);
         return map;

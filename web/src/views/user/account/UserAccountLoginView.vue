@@ -11,6 +11,17 @@
                         <label for="password" class="form-label">密码</label>
                         <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
                     </div>
+                    <div class="mb-3">
+                        <label for="kaptcha" class="form-label">验证码</label>
+                        <div class="row">
+                            <div class="col-7">
+                                <input v-model="kaptcha" type="text" class="form-control" id="kaptcha" placeholder="请输入验证码">
+                            </div>
+                            <div class="col-5">
+                                <img ref="kaptcha_img" src="" alt="" @click="get_kaptcha" class="captcha-img">
+                            </div>
+                        </div>
+                    </div>
                     <div class="error-message">{{ error_message }}</div>
                     <button type="submit" class="btn btn-primary">提交</button>
                 </form>
@@ -22,8 +33,9 @@
 <script>
 import ContentField from '../../../components/ContentField.vue';
 import { useStore } from 'vuex';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import router from '../../../router/index';
+import $ from 'jquery';
 
 export default {
     components: {
@@ -33,6 +45,9 @@ export default {
         const store = useStore();
         let username = ref('');
         let password = ref('');
+        let kaptcha = ref('');
+        let kaptcha_img = ref('');
+        let kaptcha_uuid = ref('');
         let error_message = ref('');
 
         const jwt_token = localStorage.getItem("jwt_token");
@@ -56,6 +71,8 @@ export default {
             store.dispatch("login", {
                 username: username.value,
                 password: password.value,
+                kaptcha: kaptcha.value,
+                kaptcha_uuid: kaptcha_uuid.value,
                 success() {
                     store.dispatch("getinfo", {
                         success() {
@@ -63,15 +80,44 @@ export default {
                         } 
                     });
                 },
-                error() {
-                    error_message.value = "用户名或密码错误";
+                error(resp) {
+                    get_kaptcha();
+                    if(resp.statusText === "error")
+                        error_message.value = "用户名或密码错误";
+                    else 
+                        error_message.value = resp.error_message;
                 },
             });
-        }
+        };
+
+        const get_kaptcha = () => {
+            let t = Math.random();
+            let type;
+            if(t < 0.5) type = "math";
+            else type = "char";
+            $.ajax({
+                url: "http://127.0.0.1:3000/getKaptcha?captchaType=" + type,
+                type: "get",
+                success(resp) {
+                    if(resp.error_message === "success") {
+                        kaptcha_img.value.src = "data:image/gif;base64," + resp.img;
+                        kaptcha_uuid.value = resp.uuid;
+                    }
+                }
+            });
+        };
+
+        onMounted(() => {
+            get_kaptcha(); 
+        });
 
         return {
             username,
             password,
+            kaptcha,
+            kaptcha_img,
+            kaptcha_uuid,
+            get_kaptcha,
             error_message,
             login,
         }
@@ -86,5 +132,9 @@ button {
 
 div.error-message {
     color: red;
+}
+
+img.captcha-img {
+    width: 100%;
 }
 </style>

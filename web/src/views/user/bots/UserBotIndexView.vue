@@ -66,7 +66,7 @@
                                     <td>{{ bot.createtime }}</td>
                                     <td>
                                         <button type="button" class="btn btn-secondary" style="margin-right: 10px;" data-bs-toggle="modal" :data-bs-target="'#update-bot-modal-' + bot.id">修改</button>
-                                        <button type="button" class="btn btn-danger" @click="remove_bot(bot)">删除</button>
+                                        <button type="button" class="btn btn-danger"  data-bs-toggle="modal" :data-bs-target="'#delete-bot-modal-' + bot.id">删除</button>
 
                                         <!-- Modal -->
                                         <div class="modal fade" :id="'update-bot-modal-' + bot.id" tabindex="-1">
@@ -103,6 +103,25 @@
                                             </div>
                                             </div>
                                         </div>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" :id="'delete-bot-modal-' + bot.id" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">删除Bot</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        您确认删除标题为：{{ bot.title }} 的Bot吗？
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" @click="remove_bot(bot)">确认删除</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -120,7 +139,8 @@ import $ from 'jquery';
 import { useStore } from 'vuex';
 import { Modal } from 'bootstrap/dist/js/bootstrap';
 import { VAceEditor } from 'vue3-ace-editor';
-import ace from 'ace-builds';
+import * as ace from 'ace-builds';
+import { ElMessage } from 'element-plus';
 
 export default {
     components: {
@@ -176,6 +196,12 @@ export default {
                         botadd.content = "";
                         Modal.getInstance("#add-bot").hide();
                         refresh_bots();
+
+                        ElMessage({
+                            showClose: true,
+                            message: '添加成功',
+                            type: 'success',
+                        });
                     } else {
                         botadd.error_message = resp.error_message;
                     }
@@ -195,7 +221,13 @@ export default {
                 },
                 success(resp) {
                     if(resp.error_message === "success") {
+                        Modal.getInstance('#delete-bot-modal-' + bot.id).hide();
                         refresh_bots();
+                        ElMessage({
+                            showClose: true,
+                            message: '删除成功',
+                            type: 'success',
+                        })
                     }
                 }
             })
@@ -219,6 +251,11 @@ export default {
                     if(resp.error_message === "success") {
                         Modal.getInstance('#update-bot-modal-' + bot.id).hide();
                         refresh_bots();
+                        ElMessage({
+                            showClose: true,
+                            message: '更新成功',
+                            type: 'success',
+                        })
                     } else {
                         botadd.error_message = resp.error_message;
                     }
@@ -226,12 +263,29 @@ export default {
             });
         };
 
+        const editorInit = () => {
+            require("ace-builds/src-noconflict/ext-language_tools");
+            require("ace-builds/src-noconflict/snippets/sql");
+            require("ace-builds/src-noconflict/mode-sql");
+            require("ace-builds/src-noconflict/theme-monokai");
+            require("ace-builds/src-noconflict/mode-html");
+            require("ace-builds/src-noconflict/mode-html_elixir");
+            require("ace-builds/src-noconflict/mode-html_ruby");
+            require("ace-builds/src-noconflict/mode-javascript");
+            require("ace-builds/src-noconflict/mode-python");
+            require("ace-builds/src-noconflict/snippets/less");
+            require("ace-builds/src-noconflict/theme-chrome");
+            require("ace-builds/src-noconflict/ext-static_highlight");
+            require("ace-builds/src-noconflict/ext-beautify");
+        }
+
         return {
             bots,
             botadd,
             add_bot,
             update_bot,
             remove_bot,
+            editorInit,
         }
     }
 }

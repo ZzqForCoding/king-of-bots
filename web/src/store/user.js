@@ -40,6 +40,8 @@ export default {
             data: {
                 username: data.username,
                 password: data.password,
+                kaptcha: data.kaptcha,
+                kaptcha_uuid: data.kaptcha_uuid,
             },
             success(resp) {
                 if(resp.error_message === "success") {

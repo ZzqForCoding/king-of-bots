@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface LoginService {
 
-    public Map<String, String> getToken(String username, String password);
+    public Map<String, String> getToken(String username, String password, String kaptcha, String kaptcha_uuid);
 }
