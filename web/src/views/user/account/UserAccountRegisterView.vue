@@ -12,7 +12,7 @@
                         <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
                     </div>
                     <div class="mb-3">
-                        <label for="confirmedPassword" class="form-label">密码</label>
+                        <label for="confirmedPassword" class="form-label">确认密码</label>
                         <input v-model="confirmedPassword" type="password" class="form-control" id="confirmedPassword" placeholder="请再次输入密码">
                     </div>
                     <div class="error-message">{{ error_message }}</div>
