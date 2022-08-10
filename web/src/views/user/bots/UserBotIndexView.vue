@@ -263,20 +263,8 @@ export default {
             });
         };
 
-        const editorInit = () => {
-            require("ace-builds/src-noconflict/ext-language_tools");
-            require("ace-builds/src-noconflict/snippets/sql");
-            require("ace-builds/src-noconflict/mode-sql");
-            require("ace-builds/src-noconflict/theme-monokai");
-            require("ace-builds/src-noconflict/mode-html");
-            require("ace-builds/src-noconflict/mode-html_elixir");
-            require("ace-builds/src-noconflict/mode-html_ruby");
-            require("ace-builds/src-noconflict/mode-javascript");
-            require("ace-builds/src-noconflict/mode-python");
-            require("ace-builds/src-noconflict/snippets/less");
-            require("ace-builds/src-noconflict/theme-chrome");
-            require("ace-builds/src-noconflict/ext-static_highlight");
-            require("ace-builds/src-noconflict/ext-beautify");
+        const editorInit = (editor) => {
+            editor.renderer.setShowPrintMargin(false);
         }
 
         return {
