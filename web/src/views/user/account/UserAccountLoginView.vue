@@ -91,6 +91,7 @@ export default {
         };
 
         const get_kaptcha = () => {
+            if(store.state.user.pulling_info) return;
             let t = Math.random();
             let type;
             if(t < 0.5) type = "math";
