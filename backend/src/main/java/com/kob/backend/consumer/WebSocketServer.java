@@ -3,6 +3,7 @@ package com.kob.backend.consumer;
 import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.utils.Game;
 import com.kob.backend.consumer.utils.JwtAuthentication;
+import com.kob.backend.mapper.RecordMapper;
 import com.kob.backend.mapper.UserMapper;
 import com.kob.backend.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,22 @@ public class WebSocketServer {
     private User user;
     // 目前正在链接的所有用户链接
     // ConcurrentHashMap: 线程安全的哈希表
-    private static ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
     // 线程安全的set
     private static final CopyOnWriteArraySet<User> matchPool = new CopyOnWriteArraySet<>();
     private static UserMapper userMapper;
+    public static RecordMapper recordMapper;
+    private Game game = null;
 
     // 因为WebSocketServer不是单例的，因此需要用此方式注入UserMapper
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
         WebSocketServer.userMapper = userMapper;
+    }
+
+    @Autowired
+    public void setRecordMapper(RecordMapper recordMapper) {
+        WebSocketServer.recordMapper = recordMapper;
     }
 
     @OnOpen
@@ -75,15 +83,30 @@ public class WebSocketServer {
             matchPool.remove(a);
             matchPool.remove(b);
 
-            Game game = new Game(13, 14, 20);
+            Game game = new Game(13, 14, 20, a.getId(), b.getId());
             game.createMap();
+            // 一局游戏一个线程，会执行game类的run方法
+            game.start();
+
+            users.get(a.getId()).game = game;
+            users.get(b .getId()).game = game;
+
+            JSONObject respGame = new JSONObject();
+            // 玩家的id以及横纵信息
+            respGame.put("a_id", game.getPlayerA().getId());
+            respGame.put("a_sx", game.getPlayerA().getSx());
+            respGame.put("a_sy", game.getPlayerA().getSy());
+            respGame.put("b_id", game.getPlayerB().getId());
+            respGame.put("b_sx", game.getPlayerB().getSx());
+            respGame.put("b_sy", game.getPlayerB().getSy());
+            respGame.put("map", game.getG());
 
             // 发送给A的信息
             JSONObject respA = new JSONObject();
             respA.put("event", "start-matching");
             respA.put("opponent_username", b.getUsername());
             respA.put("opponent_photo", b.getPhoto());
-            respA.put("gamemap", game.getG());
+            respA.put("game", respGame);
             // 通过userId取出a的连接，给A发送respA
             users.get(a.getId()).sendMessage(respA.toJSONString());
 
@@ -92,7 +115,7 @@ public class WebSocketServer {
             respB.put("event", "start-matching");
             respB.put("opponent_username", a.getUsername());
             respB.put("opponent_photo", a.getPhoto());
-            respB.put("gamemap", game.getG());
+            respB.put("game", respGame);
             // 通过userId取出b的连接，给B发送respB
             users.get(b.getId()).sendMessage(respB.toJSONString());
         }
@@ -101,6 +124,14 @@ public class WebSocketServer {
     private void stopMatching() {
         System.out.println("stop matching");
         matchPool.remove(this.user);
+    }
+
+    private void move(int direction) {
+        if(game.getPlayerA().getId().equals(user.getId())) {
+            game.setNextStepA(direction);
+        } else if(game.getPlayerB().getId().equals(user.getId())) {
+            game.setNextStepB(direction);
+        }
     }
 
     @OnMessage
@@ -113,6 +144,8 @@ public class WebSocketServer {
             startMatching();
         } else if("stop-matching".equals(event)) {
             stopMatching();
+        } else if("move".equals(event)) {
+            move(data.getInteger("direction"));
         }
     }
 
