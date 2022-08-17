@@ -37,7 +37,6 @@ export class GameMap extends AcGameObject {
                 }
             }
         }
-        return true;
     }
 
     start() {
