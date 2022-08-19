@@ -12,12 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Player {
     private Integer id;
+    private Integer botId;  // -1表示亲自出马，否则表示用AI打
+    private String botCode;
     private Integer sx;
     private Integer sy;
     // 蛇每个球的方向
     private List<Integer> steps;
 
-    // 检查当前会和，蛇的长度是否会增加
+    // 检查当前回合，蛇的长度是否会增加
     private boolean check_tail_increasing(int step) {
         if(step <= 10) return true;
         return step % 3 == 1;
