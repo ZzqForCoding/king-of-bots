@@ -31,7 +31,7 @@ public class WebSocketServer {
     // 目前正在链接的所有用户链接
     // ConcurrentHashMap: 线程安全的哈希表
     public static ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
-    private static UserMapper userMapper;
+    public static UserMapper userMapper;
     public static RecordMapper recordMapper;
     public static BotMapper botMapper;
     public static RestTemplate restTemplate;

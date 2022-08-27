@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.kob.backend.consumer.WebSocketServer;
 import com.kob.backend.pojo.Bot;
 import com.kob.backend.pojo.Record;
+import com.kob.backend.pojo.User;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -27,6 +28,7 @@ public class Game extends Thread {
     private String status = "playing";  // playing -> finished
     private String loser = "";  // all: 平局，A：A输，B：B输
     private static final String addBotUrl = "http://127.0.0.1:3002/bot/add/";
+    private boolean isStart = true;
 
     public Game(
             Integer rows,
@@ -176,9 +178,14 @@ public class Game extends Thread {
 
     // 接收玩家的下一步操作
     private boolean nextStep() {
-        // 每秒五步操作，因此第一步操作是在200ms后判断是否接收到输入。
+        // 每秒五步操作，因此第一步操作是在200ms后判断是否接收到输入。并给地图初始化时间
         try {
-            Thread.sleep(200);
+            if(isStart) {
+                Thread.sleep(2000);
+                isStart = false;
+            } else {
+                Thread.sleep(200);
+            }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -294,7 +301,27 @@ public class Game extends Thread {
         return res.toString();
     }
 
+    private void updateUserRating(Player player, Integer rating) {
+        User user = WebSocketServer.userMapper.selectById(player.getId());
+        user.setRating(rating);
+        WebSocketServer.userMapper.updateById(user);
+    }
+
     private void saveToDataBase() {
+        Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
+        Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
+
+        if("A".equals(loser)) {
+            ratingA -= 2;
+            ratingB += 5;
+        } else if("B".equals(loser)) {
+            ratingA += 5;
+            ratingB -= 2;
+        }
+
+        updateUserRating(playerA, ratingA);
+        updateUserRating(playerB, ratingB);
+
         Record record = new Record(
                 null,
                 playerA.getId(),

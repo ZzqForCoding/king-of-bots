@@ -22,6 +22,7 @@ export default {
         const socketUrl = `ws://127.0.0.1:3000/websocket/${store.state.user.token}/`;
 
         store.commit("updateLoser", 'none');
+        store.commit("updateIsRecord", false);
 
         let socket = null;
         onMounted(() => {
@@ -48,7 +49,7 @@ export default {
                     });
                     setTimeout(() => {
                         store.commit("updateStatus", "playing");
-                    }, 200);
+                    }, 2000);
                     store.commit("updateGame", data.game);
                 } else if(data.event === "move") {
                     console.log(data);
