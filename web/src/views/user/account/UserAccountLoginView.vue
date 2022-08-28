@@ -97,7 +97,7 @@ export default {
             if(t < 0.5) type = "math";
             else type = "char";
             $.ajax({
-                url: "http://127.0.0.1:3000/getKaptcha?captchaType=" + type,
+                url: "https://app3222.acapp.acwing.com.cn:20112/api/getKaptcha?captchaType=" + type,
                 type: "get",
                 success(resp) {
                     if(resp.error_message === "success") {

@@ -27,7 +27,7 @@ public class KaptchaController {
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
 
-    @GetMapping("/getKaptcha")
+    @GetMapping("/api/getKaptcha")
     @ResponseBody
     public Map<String,Object> getKaptcha(@RequestParam String captchaType){
         Map<String,Object> resultMap = new HashMap<>();

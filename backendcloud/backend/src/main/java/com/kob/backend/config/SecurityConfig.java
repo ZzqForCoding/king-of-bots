@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // 放行这两个接口
-                .antMatchers("/user/account/token/", "/user/account/register/", "/getKaptcha").permitAll()
+                .antMatchers("/api/user/account/token/", "/api/user/account/register/", "/api/getKaptcha").permitAll()
                 .antMatchers("/pk/start/game/", "/pk/receive/bot/move/").hasIpAddress("127.0.0.1")
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated();
