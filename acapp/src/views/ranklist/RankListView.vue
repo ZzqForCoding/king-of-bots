@@ -1,38 +1,42 @@
 <template>
     <ContentField>
-        <table class="table table-striped table-hover" style="text-align: center;">
-            <thead>
-                <tr>
-                    <th>玩家</th>
-                    <th>天梯分</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="user in users" :key="user.id">
-                    <td>
-                        <img :src="user.photo" alt="" class="user-photo">
-                        &nbsp;
-                        <span class="user-username">{{ user.username }}</span>
-                    </td>
-                    <td>
-                        {{ user.rating }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <nav aria-label="...">
-            <ul class="pagination" style="float: right;">
-                <li class="page-item" @click="click_page(-2)">
-                    <a class="page-link" href="#">前一页</a>
-                </li>
-                <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number" @click="click_page(page.number)">
-                    <a class="page-link" href="#">{{ page.number }}</a>
-                </li>
-                <li class="page-item" @click="click_page(-1)">
-                    <a class="page-link" href="#">后一页</a>
-                </li>
-            </ul>
-        </nav>
+        <div class="game-table">
+            <div>
+                <table style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th>玩家</th>
+                            <th>天梯分</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in users" :key="user.id">
+                            <td class="game-table-username">
+                                <img :src="user.photo" alt="" class="user-photo">
+                                &nbsp;
+                                <span class="user-username">{{ user.username }}</span>
+                            </td>
+                            <td>
+                                {{ user.rating }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul style="padding: 0;">
+                        <li class="game-page-item" @click="click_page(-2)">
+                            <a class="game-page-link" href="#">前一页</a>
+                        </li>
+                        <li :class="'game-page-item ' + page.is_active" v-for="page in pages" :key="page.number" @click="click_page(page.number)">
+                            <a class="game-page-link" href="#">{{ page.number }}</a>
+                        </li>
+                        <li class="game-page-item" @click="click_page(-1)">
+                            <a class="game-page-link" href="#">后一页</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </ContentField>
 </template>
 
@@ -93,9 +97,6 @@ export default {
                     total_users = resp.users_count;
                     update_pages();
                 },
-                error(resp) {
-                    console.log(resp);
-                }
             })
         };
 
@@ -114,5 +115,55 @@ export default {
 img.user-photo {
     width: 4vh;
     border-radius: 50%;
+}
+div.game-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+div.game-table table {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+.game-table-username {
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 7.5vw;
+}
+td {
+    width: 15vw;
+}
+th {
+    text-align: center;
+}
+.game-page-item {
+    display: inline-block;
+    background-color: white;
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+}
+.game-page-item:hover {
+    background-color: #E9ECEF;
+}
+.game-page-item.active {
+    background-color: #0d6efd;
+}
+.game-page-item.active > a {
+    color: white;
+}
+.game-page-link {
+    color: #0d6efd;
+    text-decoration: none;
+}
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
 }
 </style>

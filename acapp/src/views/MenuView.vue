@@ -68,7 +68,7 @@ div.menu-item {
     cursor: pointer;
 }
 div.menu-item:hover {
-    scale: 1.2;
+    transform: scale(1.2);
     transition: 200;
 }
 </style>
