@@ -1,12 +1,12 @@
 <template>
-        <div class="game-body">
-            <MenuView v-if="$store.state.router.router_name === 'menu'" />
-            <PkIndexViewVue v-else-if="$store.state.router.router_name === 'pk'" />
-            <RecordIndexViewVue v-else-if="$store.state.router.router_name === 'record'" />
-            <RecordContentViewVue v-else-if="$store.state.router.router_name === 'record_content'" />
-            <RankListViewVue v-else-if="$store.state.router.router_name === 'ranklist'" />
-            <UserBotIndexViewVue v-else-if="$store.state.router.router_name === 'user_bot'" />
-        </div>
+    <div class="game-body">
+        <MenuView v-if="$store.state.router.router_name === 'menu'" />
+        <PkIndexViewVue v-else-if="$store.state.router.router_name === 'pk'" />
+        <RecordIndexViewVue v-else-if="$store.state.router.router_name === 'record'" />
+        <RecordContentViewVue v-else-if="$store.state.router.router_name === 'record_content'" />
+        <RankListViewVue v-else-if="$store.state.router.router_name === 'ranklist'" />
+        <UserBotIndexViewVue v-else-if="$store.state.router.router_name === 'user_bot'" />
+    </div>
 </template>
 
 <script>
@@ -17,6 +17,7 @@ import RecordIndexViewVue from './views/record/RecordIndexView.vue';
 import RecordContentViewVue from './views/record/RecordContentView.vue';
 import RankListViewVue from './views/ranklist/RankListView.vue';
 import UserBotIndexViewVue from './views/user/bots/UserBotIndexView.vue';
+import $ from 'jquery';
 
 export default {
     name: "App",
@@ -30,20 +31,33 @@ export default {
     },
     setup() {
         const store = useStore();
-        const jwt_token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlOWNhNjk1MzhjYzg0MDA0YmMyYzZiYzJhMzEwNDhjMiIsInN1YiI6IjEiLCJpc3MiOiJzZyIsImlhdCI6MTY2MTkzODg0NSwiZXhwIjoxNjYzMTQ4NDQ1fQ.ybk3los1-vaVUAY-4T31Ko_SMw2hTI9SQQoUpwtSLgE";
-        if(jwt_token) {
-            store.commit("updateToken", jwt_token);
-            store.dispatch("getinfo", {
-                success() {
-                    store.commit("updatePullingInfo", false);
-                },
-                error() {
-                    store.commit("updatePullingInfo", false);
+
+        $.ajax({
+            url: "https://app3222.acapp.acwing.com.cn:20112/api/user/account/acwing/acapp/apply_code/",
+            type: "GET",
+            success: resp => {
+                if(resp.result === "success") {
+                    store.state.user.AcWingOS.api.oauth2.authorize(resp.appid, resp.redirect_uri, resp.scope, resp.state, resp => {
+                        if(resp.result === "success") {
+                            const jwt_token = resp.jwt_token;
+                            store.commit("updateToken", jwt_token);
+                            store.dispatch("getinfo", {
+                                success() {
+                                    store.commit("updatePullingInfo", false);
+                                },
+                                error() {
+                                    store.commit("updatePullingInfo", false);
+                                }
+                            });
+                        } else {
+                            store.state.user.AcWingOS.api.window.close();
+                        }
+                    });
+                } else {
+                    store.state.user.AcWingOS.api.window.close();
                 }
-            });
-        } else {
-            store.commit("updatePullingInfo", false);
-        }
+            }
+        });
     }
 }
 </script>
