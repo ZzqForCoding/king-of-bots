@@ -126,7 +126,7 @@ public class Game extends Thread {
             for(int j = 0; j < 1000; j++) {
                 int r = random.nextInt(this.rows);
                 int c = random.nextInt(this.cols);
-                if(g[r][c] == 1 || g[this.rows - 1 - c][this.cols - 1 - c] == 1) {
+                if(g[r][c] == 1 || g[this.rows - 1 - r][this.cols - 1 - c] == 1) {
                     continue;
                 }
                 if(r == this.rows - 2 && c == 1 || r == 1 && c == this.cols - 2) {
