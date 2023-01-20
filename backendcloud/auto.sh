@@ -1,5 +1,5 @@
 #! /bin/bash
-USER_PASSWORD=123
+USER_PASSWORD=Zcbm980528
 USERNAME=acs
 
 #项目路径
