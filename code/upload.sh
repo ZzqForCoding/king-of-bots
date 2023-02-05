@@ -21,16 +21,11 @@ scp acapp/dist/css/*.css zzq:/home/zzq/king_of_bots/acapp
 scp -r web/dist/* zzq:/home/zzq/king_of_bots/web
 
 # 上传后端jar包
-scp backendcloud\backend\target\backend-0.0.1-SNAPSHOT.jar zzq:/home/zzq/king_of_bots/backendcloud
-scp backendcloud\matchingsystem\target\matchingsystem-0.0.1-SNAPSHOT.jar zzq:/home/zzq/king_of_bots/backendcloud
-scp backendcloud\botrunningsystem\target\botrunningsystem-0.0.1-SNAPSHOT.jar zzq:/home/zzq/king_of_bots/backendcloud
-
-# 将本地代码git提交
-git add .
-git commit -m "$1"
-git push
+scp backendcloud/backend/target/backend-0.0.1-SNAPSHOT.jar zzq:/home/zzq/king_of_bots/backendcloud
+scp backendcloud/matchingsystem/target/matchingsystem-0.0.1-SNAPSHOT.jar zzq:/home/zzq/king_of_bots/backendcloud
+scp backendcloud/botrunningsystem/target/botrunningsystem-0.0.1-SNAPSHOT.jar zzq:/home/zzq/king_of_bots/backendcloud
 
 # 执行服务器脚本并将服务器代码git提交
-ssh zzq 'cd /home/zzq/king_of_bots && acapp/rename.sh && git pull && git add . && git commit -m "提交本地代码至服务器" && git push'
+ssh zzq 'cd /home/zzq/king_of_bots && acapp/rename.sh'
 
 
