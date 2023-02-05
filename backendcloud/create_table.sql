@@ -6,8 +6,10 @@ create table bot
 (
     id          int auto_increment
         primary key,
-    description varchar(100) null,
-    content     varchar(300) null,
+    user_id     int           null,
+    title       varchar(100) null,
+    description varchar(300) null,
+    content     varchar(10000) null,
     createtime  datetime     null,
     modifytime  datetime     null,
     constraint id
@@ -35,10 +37,13 @@ create table record
 
 create table user
 (
-    id       int              null,
+    id       int    auto_increment
+    primary key,
     username varchar(100)     null,
     password varchar(100)     null,
-    rating   int default 1500 null
+    photo    varchar(1000)    null,
+    rating   int default 1500 null,
+    openid   varchar(100)     null
 );
 
 show tables;

@@ -76,17 +76,3 @@ export class Game {
         myfunc(myappid, AcWingOS);
     }
 }
-
-export class Game {
-    constructor(id, AcWingOS) {
-    	const myappid = '#' + id;
-        myfunc(myappid, AcWingOS);
-    }
-}
-
-export class Game {
-    constructor(id, AcWingOS) {
-    	const myappid = '#' + id;
-        myfunc(myappid, AcWingOS);
-    }
-}
