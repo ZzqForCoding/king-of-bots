@@ -24,7 +24,7 @@ import java.util.Random;
 public class AcAppServiceImpl implements AcAppService {
     private static final String appid = "3222";
     private static final String appSecret = "83044f24d0f54c4ea041b684f902c1f9";
-    private static final String redirectUri = "https://app3222.acapp.acwing.com.cn:20112/api/user/account/acwing/acapp/receive_code/";
+    private static final String redirectUri = "https://app3222.acapp.acwing.com.cn:20022/api/user/account/acwing/acapp/receive_code/";
     private static final String applyAccessTokenUrl = "https://www.acwing.com/third_party/api/oauth2/access_token/";
     private static final String getUserInfo = "https://www.acwing.com/third_party/api/meta/identity/getinfo/";
     private static final Random random = new Random();

@@ -26,7 +26,7 @@ public class WebServiceImpl implements WebService {
     private static final String appSecret = "83044f24d0f54c4ea041b684f902c1f9";
     // 由于后端是restful风格接口，因此不请求后端接口，请求前端接口
     // (nginx配置会按照api路径转发到相应地方，/api开头的路由到后端，/websocket开头会路由到websocket，其他路径路由到前端)
-    private static final String redirectUri = "https://app3222.acapp.acwing.com.cn:20112/user/account/acwing/web/receive_code/";
+    private static final String redirectUri = "https://app3222.acapp.acwing.com.cn:20022/user/account/acwing/web/receive_code/";
     private static final String applyAccessTokenUrl = "https://www.acwing.com/third_party/api/oauth2/access_token/";
     private static final String getUserInfo = "https://www.acwing.com/third_party/api/meta/identity/getinfo/";
     private static final Random random = new Random();
