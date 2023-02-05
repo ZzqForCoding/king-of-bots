@@ -26,7 +26,9 @@
                 </div>
             </div>
             <div class="col-12" style="text-align: center; padding-top: 15vh;">
-                <button @click="click_match_btn" type="button" class="btn btn-warning btn-lg">{{ match_btn_info }}</button>
+                <button @click="click_match_btn" type="button" class="btn btn-warning btn-lg">{{
+                    match_btn_info
+                }}</button>
             </div>
         </div>
     </div>
@@ -45,7 +47,7 @@ export default {
         let select_bot = ref("-1");
 
         const click_match_btn = () => {
-            if(match_btn_info.value === "开始匹配") {
+            if (match_btn_info.value === "开始匹配") {
                 match_btn_info.value = "取消";
                 store.state.pk.socket.send(JSON.stringify({
                     event: "start-matching",
@@ -57,11 +59,11 @@ export default {
                     event: "stop-matching",
                 }));
             }
-        }; 
+        };
 
         const refresh_bots = () => {
             $.ajax({
-                url: "https://app3222.acapp.acwing.com.cn:20112/api/user/bot/getlist/",
+                url: "https://app3222.acapp.acwing.com.cn:20022/api/user/bot/getlist/",
                 type: "get",
                 headers: {
                     'Authorization': "Bearer " + store.state.user.token,
@@ -89,15 +91,17 @@ div.matchground {
     background-color: rgba(50, 50, 50, 0.5);
     margin: 40px auto;
 }
+
 div.user-photo {
     text-align: center;
     padding-top: 10vh;
 }
 
-div.user-photo > img {
+div.user-photo>img {
     border-radius: 50%;
     width: 20vh;
 }
+
 div.user-username {
     text-align: center;
     font-size: 24px;
@@ -105,10 +109,12 @@ div.user-username {
     color: white;
     padding-top: 2vh;
 }
+
 div.user-select-bot {
     padding-top: 20vh;
 }
-div.user-select-bot > select {
+
+div.user-select-bot>select {
     width: 60%;
     margin: 0 auto;
 }

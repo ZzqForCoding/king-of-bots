@@ -1,6 +1,6 @@
 <template>
     <div>
-        
+
     </div>
 </template>
 
@@ -14,16 +14,16 @@ export default {
     setup() {
         const myRoute = useRoute();
         const store = useStore();
-        
+
         $.ajax({
-            url: "https://app3222.acapp.acwing.com.cn:20112/api/user/account/acwing/web/receive_code/", 
+            url: "https://app3222.acapp.acwing.com.cn:20022/api/user/account/acwing/web/receive_code/",
             type: "GET",
             data: {
                 code: myRoute.query.code,
                 state: myRoute.query.state
             },
             success: resp => {
-                if(resp.result === "success") {
+                if (resp.result === "success") {
                     localStorage.setItem("jwt_token", resp.jwt_token);
                     store.commit("updateToken", resp.jwt_token);
                     router.push({ name: "home" });

@@ -25,7 +25,8 @@
                 <li class="page-item" @click="click_page(-2)">
                     <a class="page-link" href="#">前一页</a>
                 </li>
-                <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number" @click="click_page(page.number)">
+                <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number"
+                    @click="click_page(page.number)">
                     <a class="page-link" href="#">{{ page.number }}</a>
                 </li>
                 <li class="page-item" @click="click_page(-1)">
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import ContentField from '../../components/ContentField.vue'    
+import ContentField from '../../components/ContentField.vue'
 import { useStore } from 'vuex';
 import { ref } from 'vue';
 import $ from 'jquery';
@@ -54,11 +55,11 @@ export default {
         let pages = ref([]);
 
         const click_page = page => {
-            if(page === -2) page = current_page - 1;
-            else if(page === -1) page = current_page + 1;
+            if (page === -2) page = current_page - 1;
+            else if (page === -1) page = current_page + 1;
             let max_pages = parseInt(Math.ceil(total_users / 10));
 
-            if(page >= 1 && page <= max_pages) {
+            if (page >= 1 && page <= max_pages) {
                 pull_page(page);
             }
         }
@@ -66,8 +67,8 @@ export default {
         const update_pages = () => {
             let max_pages = parseInt(Math.ceil(total_users / 10));
             let new_pages = [];
-            for(let i = current_page - 2; i <= current_page + 2; i++) {
-                if(i >= 1 && i <= max_pages) {
+            for (let i = current_page - 2; i <= current_page + 2; i++) {
+                if (i >= 1 && i <= max_pages) {
                     new_pages.push({
                         number: i,
                         is_active: i === current_page ? "active" : "",
@@ -80,7 +81,7 @@ export default {
         const pull_page = page => {
             current_page = page;
             $.ajax({
-                url: "https://app3222.acapp.acwing.com.cn:20112/api/ranklist/getlist/",
+                url: "https://app3222.acapp.acwing.com.cn:20022/api/ranklist/getlist/",
                 data: {
                     page,
                 },

@@ -33,7 +33,7 @@ export default {
         const store = useStore();
 
         $.ajax({
-            url: "https://app3222.acapp.acwing.com.cn:20112/api/user/account/acwing/acapp/apply_code/",
+            url: "https://app3222.acapp.acwing.com.cn:20022/api/user/account/acwing/acapp/apply_code/",
             type: "GET",
             success: resp => {
                 if(resp.result === "success") {

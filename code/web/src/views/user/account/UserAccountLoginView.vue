@@ -1,7 +1,7 @@
 <template>
     <ContentField v-if="!$store.state.user.pulling_info">
         <div class="row justify-content-md-center">
-            <div class="col-3" >
+            <div class="col-3">
                 <form @submit.prevent="login">
                     <div class="mb-3">
                         <label for="username" class="form-label">用户名</label>
@@ -9,13 +9,15 @@
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">密码</label>
-                        <input v-model="password" type="password" class="form-control" id="password" placeholder="请输入密码">
+                        <input v-model="password" type="password" class="form-control" id="password"
+                            placeholder="请输入密码">
                     </div>
                     <div class="mb-3">
                         <label for="kaptcha" class="form-label">验证码</label>
                         <div class="row">
                             <div class="col-7">
-                                <input v-model="kaptcha" type="text" class="form-control" id="kaptcha" placeholder="请输入验证码">
+                                <input v-model="kaptcha" type="text" class="form-control" id="kaptcha"
+                                    placeholder="请输入验证码">
                             </div>
                             <div class="col-5">
                                 <img ref="kaptcha_img" src="" alt="" @click="get_kaptcha" class="captcha-img">
@@ -26,7 +28,8 @@
                     <button type="submit" class="btn btn-primary">提交</button>
                 </form>
                 <div style="text-align: center; margin-top: 20px; cursor: pointer;" @click="acwing_login">
-                    <img width="30" src="https://cdn.acwing.com/media/article/image/2022/09/06/1_32f001fd2d-acwing_logo.png" alt="">
+                    <img width="30"
+                        src="https://cdn.acwing.com/media/article/image/2022/09/06/1_32f001fd2d-acwing_logo.png" alt="">
                     <br>
                     AcWing一键登录
                 </div>
@@ -56,11 +59,11 @@ export default {
         let error_message = ref('');
 
         const jwt_token = localStorage.getItem("jwt_token");
-        if(jwt_token) {
+        if (jwt_token) {
             store.commit("updateToken", jwt_token);
             store.dispatch("getinfo", {
                 success() {
-                    router.push({name: "home"});
+                    router.push({ name: "home" });
                     store.commit("updatePullingInfo", false);
                 },
                 error() {
@@ -82,30 +85,30 @@ export default {
                     store.dispatch("getinfo", {
                         success() {
                             router.push({ name: 'home' });
-                        } 
+                        }
                     });
                 },
                 error(resp) {
                     get_kaptcha();
-                    if(resp.statusText === "error")
+                    if (resp.statusText === "error")
                         error_message.value = "用户名或密码错误";
-                    else 
+                    else
                         error_message.value = resp.error_message;
                 },
             });
         };
 
         const get_kaptcha = () => {
-            if(store.state.user.pulling_info) return;
+            if (store.state.user.pulling_info) return;
             let t = Math.random();
             let type;
-            if(t < 0.5) type = "math";
+            if (t < 0.5) type = "math";
             else type = "char";
             $.ajax({
-                url: "https://app3222.acapp.acwing.com.cn:20112/api/getKaptcha?captchaType=" + type,
+                url: "https://app3222.acapp.acwing.com.cn:20022/api/getKaptcha?captchaType=" + type,
                 type: "get",
                 success(resp) {
-                    if(resp.error_message === "success") {
+                    if (resp.error_message === "success") {
                         kaptcha_img.value.src = "data:image/gif;base64," + resp.img;
                         kaptcha_uuid.value = resp.uuid;
                     }
@@ -115,10 +118,10 @@ export default {
 
         const acwing_login = () => {
             $.ajax({
-                url: "https://app3222.acapp.acwing.com.cn:20112/api/user/account/acwing/web/apply_code/",
+                url: "https://app3222.acapp.acwing.com.cn:20022/api/user/account/acwing/web/apply_code/",
                 type: "GET",
                 success: resp => {
-                    if(resp.result === "success") {
+                    if (resp.result === "success") {
                         window.location.replace(resp.apply_code_url)
                     }
                 }
@@ -126,7 +129,7 @@ export default {
         }
 
         onMounted(() => {
-            get_kaptcha(); 
+            get_kaptcha();
         });
 
         return {

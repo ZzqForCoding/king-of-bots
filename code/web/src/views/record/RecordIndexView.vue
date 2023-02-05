@@ -27,7 +27,8 @@
                     </td>
                     <td>{{ record.record.createtime }}</td>
                     <td>
-                        <button @click="open_record_content(record.record.id)" type="button" class="btn btn-secondary">查看录像</button>
+                        <button @click="open_record_content(record.record.id)" type="button"
+                            class="btn btn-secondary">查看录像</button>
                     </td>
                 </tr>
             </tbody>
@@ -37,7 +38,8 @@
                 <li class="page-item" @click="click_page(-2)">
                     <a class="page-link" href="#">前一页</a>
                 </li>
-                <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number" @click="click_page(page.number)">
+                <li :class="'page-item ' + page.is_active" v-for="page in pages" :key="page.number"
+                    @click="click_page(page.number)">
                     <a class="page-link" href="#">{{ page.number }}</a>
                 </li>
                 <li class="page-item" @click="click_page(-1)">
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import ContentField from '../../components/ContentField.vue'    
+import ContentField from '../../components/ContentField.vue'
 import { useStore } from 'vuex';
 import { ref } from 'vue';
 import $ from 'jquery';
@@ -67,11 +69,11 @@ export default {
         let pages = ref([]);
 
         const click_page = page => {
-            if(page === -2) page = current_page - 1;
-            else if(page === -1) page = current_page + 1;
+            if (page === -2) page = current_page - 1;
+            else if (page === -1) page = current_page + 1;
             let max_pages = parseInt(Math.ceil(total_records / 10));
 
-            if(page >= 1 && page <= max_pages) {
+            if (page >= 1 && page <= max_pages) {
                 pull_page(page);
             }
         }
@@ -79,8 +81,8 @@ export default {
         const update_pages = () => {
             let max_pages = parseInt(Math.ceil(total_records / 10));
             let new_pages = [];
-            for(let i = current_page - 2; i <= current_page + 2; i++) {
-                if(i >= 1 && i <= max_pages) {
+            for (let i = current_page - 2; i <= current_page + 2; i++) {
+                if (i >= 1 && i <= max_pages) {
                     new_pages.push({
                         number: i,
                         is_active: i === current_page ? "active" : "",
@@ -93,7 +95,7 @@ export default {
         const pull_page = page => {
             current_page = page;
             $.ajax({
-                url: "https://app3222.acapp.acwing.com.cn:20112/api/record/getlist/",
+                url: "https://app3222.acapp.acwing.com.cn:20022/api/record/getlist/",
                 data: {
                     page,
                 },
@@ -116,10 +118,10 @@ export default {
 
         const stringTo2D = map => {
             let g = [];
-            for(let i = 0, k = 0; i < 13; i++) {
+            for (let i = 0, k = 0; i < 13; i++) {
                 let line = [];
-                for(let j = 0; j < 14; j++, k++) {
-                    if(map[k] === '0') line.push(0);
+                for (let j = 0; j < 14; j++, k++) {
+                    if (map[k] === '0') line.push(0);
                     else line.push(1);
                 }
                 g.push(line);
@@ -128,8 +130,8 @@ export default {
         }
 
         const open_record_content = recordId => {
-            for(const record of records.value) {
-                if(record.record.id === recordId) {
+            for (const record of records.value) {
+                if (record.record.id === recordId) {
                     store.commit("updateIsRecord", true);
                     store.commit("updateGame", {
                         map: stringTo2D(record.record.map),
