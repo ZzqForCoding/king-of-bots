@@ -2,6 +2,9 @@
 
 ## 项目介绍
 
+[项目地址](https://github.com/ZzqForCoding/king-of-bots)
+[docker hub](https://hub.docker.com/repository/docker/zzq10/ubuntu/general)
+
 此项目是基于绕蛇进行游戏匹配，玩家可选择代码或键盘、鼠标进行操作，的一个编程对战平台，平台会执行用户所写代码，作为每回合的游戏操作，并因为玩家操作导致游戏地图不同，因此导致每回合输出不同，玩家需要编写一个通过地图与双方操作数据输入，输出一个最优决策。
 
 <br>
