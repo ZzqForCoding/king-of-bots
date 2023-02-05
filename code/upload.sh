@@ -15,8 +15,8 @@ export class Game {
 }" >> acapp/dist/js/*.js
 
 # 执行服务器脚本并将服务器中的jar包和js、css文件删除
-ssh zzq 'test -e app.js  && rm app.js \
-	&& test -e app.css && rm app.css
+ssh zzq 'test -e app.js && rm app.js \
+	&& test -e app.css && rm app.css \
 	&& rm /home/zzq/king_of_bots/backendcloud/backend-0.0.1-SNAPSHOT.jar \
 	&& rm /home/zzq/king_of_bots/backendcloud/matchingsystem-0.0.1-SNAPSHOT.jar \
 	&& rm /home/zzq/king_of_bots/backendcloud/botrunningsystem-0.0.1-SNAPSHOT.jar'
