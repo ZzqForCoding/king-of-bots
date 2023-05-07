@@ -12,6 +12,14 @@
 
 <br>
 
+## 使用技术
+
+前端技术：`ES6`、`Canvas`、`Vue`、`Vue Router`、`Vuex`、`jQuery`、`Bootstrap`。
+
+后端技术：`java`、`Spring Boot`、`Spring Boot WebSocket`、`Spring Cloud`、`Spring Security`、`Mybatis Plus`等技术。
+
+<br>
+
 ## 游戏该如何操作？
 
 该平台支持键盘或代码操作，键盘操作使用W、A、S、D进行上下左右控制，代码目前只支持Java语言，样例如下：
@@ -60,7 +68,7 @@ git clone git@git.acwing.com:study/project1/kob_server.git
 cd dockerfile所在文件夹
 # 制作镜像
 docker build -t zzq10/ubuntu:kob .
-# 运行容器
+# 运行容器，注意：此命令挂载了目录与映射了端口号，注意修改与开放端口号！
 ./docker_run.sh
 ```
 
